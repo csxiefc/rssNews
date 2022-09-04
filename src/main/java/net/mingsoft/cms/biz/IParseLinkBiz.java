@@ -2,6 +2,8 @@ package net.mingsoft.cms.biz;
 
 import net.mingsoft.cms.entity.AjaxResult;
 import net.mingsoft.cms.entity.RssItemEntity;
+import net.mingsoft.cms.entity.RssSeedEntity;
+import net.mingsoft.cms.entity.RssSiteEntity;
 
 /**
  * <p>
@@ -15,6 +17,6 @@ public interface IParseLinkBiz  {
 
     // public AjaxResult parse(String siteId);
 
-    AjaxResult<RssItemEntity> parse(RssItemEntity itemObj);
+    AjaxResult parse(RssSiteEntity siteObj, RssSeedEntity seedObj, RssItemEntity itemObj);
 
 }
