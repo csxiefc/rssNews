@@ -26,10 +26,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication(scanBasePackages={"net.mingsoft"})
-public class MSServletInitializer extends SpringBootServletInitializer {
+public class RssNewsServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(MSApplication.class);
+		return builder.sources(RssNewsApplication.class);
 	}
 }

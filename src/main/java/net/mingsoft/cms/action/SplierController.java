@@ -13,6 +13,8 @@ import net.mingsoft.cms.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/splier", produces = "application/json;charset=UTF-8")
@@ -39,11 +41,12 @@ public class SplierController {
 	public AjaxResult crawlByRssItemId(String id) {
 		IParseLinkBiz parseLinkBiz = new ParseLinkBizImpl();
 		RssItemEntity item = this.rssItemBiz.getById(id);
-		AjaxResult<ContentEntity> contentRes = parseLinkBiz.parse(item);
-		if(contentRes.getCode() == 200) { // 新增保存-CMS文章
-			this.contentBiz.save(contentRes.getData());
+		AjaxResult<RssItemEntity> itemRes = parseLinkBiz.parse(item);
+		if(itemRes.getCode() == 200) { // 新增保存-CMS文章
+			ContentEntity newObj = this.convert2CmsContent(itemRes.getData());
+			this.contentBiz.save(newObj);
 		}
-		return contentRes;
+		return itemRes;
 	}
 
 	@GetMapping(value = "execute")
@@ -53,5 +56,26 @@ public class SplierController {
 		return AjaxResult.success(DateUtil.getStringNow());
 	}
 
+	private ContentEntity convert2CmsContent(RssItemEntity item) {
+		ContentEntity newObj = new ContentEntity();
+		newObj.setDatasource("RssItem");
+		newObj.setDatasourceId(item.getId());
+		newObj.setCategoryId("1565900410928119810"); // 测试-头条资讯
+		newObj.setContentAuthor(item.getAuthor());
+		newObj.setContentDetails(item.getLinkContent());
+		newObj.setContentImg("[]");
+		newObj.setContentType("h");
+		newObj.setContentDisplay("0");
+		newObj.setContentSort(0);
+		newObj.setContentUrl(item.getLink());
+		newObj.setContentSource(item.getLink());
+		newObj.setContentDatetime(item.getPubdate());
+		newObj.setContentHit(0);
+		newObj.setCreateBy("57");
+		newObj.setCreateDate(new Date());
+		newObj.setUpdateBy("57");
+		newObj.setUpdateDate(new Date());
+		return newObj;
+	}
 
 }

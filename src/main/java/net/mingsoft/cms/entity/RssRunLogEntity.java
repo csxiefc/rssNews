@@ -9,8 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import net.mingsoft.base.entity.BaseEntity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -64,6 +62,30 @@ public class RssRunLogEntity extends BaseEntity {
     private String batchNo;
 
     /**
+     * 最后发布时间
+     */
+    @TableField("last_pubdate")
+    private Date lastPubdate;
+
+    /**
+     * 文件行数
+     */
+    @TableField("file_rows")
+    private Integer fileRows;
+
+    /**
+     * 应该解析行数
+     */
+    @TableField("should_rows")
+    private Integer shouldRows;
+
+    /**
+     * 实际解析行数
+     */
+    @TableField("fact_rows")
+    private Integer factRows;
+
+    /**
      * 开始时间
      */
     @TableField("startTime")
@@ -98,8 +120,5 @@ public class RssRunLogEntity extends BaseEntity {
      */
     @TableField("remark")
     private String remark;
-
-
-
 
 }

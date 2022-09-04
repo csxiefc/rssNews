@@ -14,17 +14,17 @@ import java.util.Date;
 
 /**
  * <p>
- * RSS网站链接
+ * RSS网站
  * </p>
  *
  * @author xiefc
- * @since 2022-08-27
+ * @since 2022-09-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("rss_seed")
-public class RssSeedEntity extends BaseEntity {
+@TableName("rss_site")
+public class RssSiteEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,10 +45,40 @@ public class RssSeedEntity extends BaseEntity {
     }
 
     /**
-     * 站点ID
+     * 网站名称
      */
-    @TableField("site_id")
-    private String siteId;
+    @TableField("name")
+    private String name;
+
+    /**
+     * 网址
+     */
+    @TableField("url")
+    private String url;
+
+    /**
+     * 作者
+     */
+    @TableField("author")
+    private String author;
+
+    /**
+     * 版权
+     */
+    @TableField("copyright")
+    private String copyright;
+
+    /**
+     * 关键字
+     */
+    @TableField("keywords")
+    private String keywords;
+
+    /**
+     * 描述
+     */
+    @TableField("description")
+    private String description;
 
     /**
      * 分类ID
@@ -63,28 +93,22 @@ public class RssSeedEntity extends BaseEntity {
     private String categoryName;
 
     /**
-     * 网址类型RSS、网站
-     */
-    @TableField("urlType")
-    private String urlType;
-
-    /**
-     * 网址
-     */
-    @TableField("url")
-    private String url;
-
-    /**
      * 权重
      */
     @TableField("weight")
     private BigDecimal weight;
 
     /**
-     * 内容解析类
+     * 缩略图路径
      */
-    @TableField("crackClazz")
-    private String crackClazz;
+    @TableField("thumbnail_path")
+    private String thumbnailPath;
+
+    /**
+     * 缩略图文字说明
+     */
+    @TableField("thumbnail_desc")
+    private String thumbnailDesc;
 
     /**
      * 内容解析XPATH配置

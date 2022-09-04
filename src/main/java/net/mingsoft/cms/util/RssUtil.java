@@ -1,15 +1,14 @@
 package net.mingsoft.cms.util;
 
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-import java.util.zip.GZIPInputStream;
-
-import com.alibaba.fastjson.JSON;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 
 public class RssUtil {
@@ -65,7 +64,7 @@ public class RssUtil {
      *
      * @throws Exception
      */
-    public static List<SyndEntry> praseXml(String url) throws Exception {
+    public static SyndFeed praseXml(String url) throws Exception {
         List<SyndEntry> result = null;
         SyndFeed feed = null;
         SyndFeedInput input = new SyndFeedInput();
@@ -83,9 +82,7 @@ public class RssUtil {
             //3.得到此输入流的有效信息
             feed = input.build(new XmlReader(conn.getInputStream()));
         }
-        // 得到XML的所有实体
-        result = feed.getEntries();
-        return result;
+        return feed;
     }
 
     public static void main(String[] args) throws Exception {

@@ -22,40 +22,29 @@
 
 package net.mingsoft.cms.action;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import net.mingsoft.base.entity.ResultData;
-import net.mingsoft.basic.annotation.LogAnn;
-import net.mingsoft.basic.bean.EUListBean;
-import net.mingsoft.basic.constant.e.BusinessTypeEnum;
-import net.mingsoft.basic.util.BasicUtil;
-import net.mingsoft.basic.util.SqlInjectionUtil;
-import net.mingsoft.basic.util.StringUtil;
-import net.mingsoft.cms.bean.ContentBean;
-import net.mingsoft.cms.biz.*;
+import net.mingsoft.cms.biz.IRssItemBiz;
+import net.mingsoft.cms.biz.IRssRunLogBiz;
+import net.mingsoft.cms.biz.IRssSeedBiz;
+import net.mingsoft.cms.biz.IRssSiteBiz;
 import net.mingsoft.cms.entity.*;
 import net.mingsoft.cms.util.DateUtil;
 import net.mingsoft.cms.util.RssUtil;
-import net.mingsoft.mdiy.biz.IModelBiz;
-import net.mingsoft.mdiy.entity.ModelEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Api(tags={"rss数据抽取"})
@@ -65,6 +54,9 @@ import java.util.*;
 @Slf4j
 public class RssAction extends BaseAction {
 
+
+	@Autowired
+	private IRssSiteBiz rssSiteBiz;
 
 	@Autowired
 	private IRssItemBiz rssItemBiz;
@@ -80,98 +72,182 @@ public class RssAction extends BaseAction {
 	 * 返回编辑界面content_form
 	 */
 	@GetMapping("/spider")
-	public void test(String siteId, String id, String url){
+	public void spider(String siteId, String seedId){
 		// 开始时间
 		long stime = System.currentTimeMillis();
-		QueryWrapper query = new QueryWrapper<>(new RssSeedEntity().setUrlType("RSS")).orderByAsc("create_date");
-		if(StringUtils.isNotEmpty(siteId)) {
-			query.eq("site_id",siteId);
+		if(StringUtils.isNotEmpty(seedId)) {
+			this.runBySeedId(seedId);
+		} else if(StringUtils.isNotEmpty(siteId)) {
+			this.runBySiteId(siteId);
+		} else if(StringUtils.isEmpty(siteId) && StringUtils.isEmpty(seedId)) {
+			this.runBySiteId(null);
 		}
-		if(StringUtils.isNotEmpty(id)) {
-			query.eq("id",id);
-		}
-		if(StringUtils.isNotEmpty(url)) {
-			query.eq("url",url);
-		}
-		List<RssSeedEntity> RssItemList = rssSeedBiz.list(query);
-		if(RssItemList == null)  {
-			return ;
-		}
-		log.info("RssItemList.size()="+RssItemList.size());
-		String batchNo = DateUtil.dateToString(new Date(), "yyyyMMddhhmmss SSSSSS");
-		for(int i=0;i<RssItemList.size();i++) {
-			log.info("Execute index ="+(i+1));
-			RssSeedEntity seedObj = RssItemList.get(i);
-			// 记录运行日志
-			RssRunLogEntity newLog = new RssRunLogEntity();
-			newLog.setBatchNo(batchNo);
-			newLog.setDatasouce("seed");
-			newLog.setDatasouceId(seedObj.getId());
-			newLog.setStartTime(new Date());
-			newLog.setStatus("run"); // 运行中
-			newLog.setCreateBy("sys");
-			newLog.setCreateDate(new Date());
-			runLogBiz.save(newLog);
-			try {
-				// 获取RSS行数据
-				List<SyndEntry> syndList =  RssUtil.praseXml(seedObj.getUrl());
-				log.info("syndList.size()="+syndList.size());
-				for(int s=0;s<syndList.size();s++) {
-					int index = (s+1);
-					log.info("SyndEntry Execute index ="+index);
-					SyndEntry syndObj = syndList.get(s);
-					// 判断URL是否已经存在
-					if(this.rssItemBiz.isExist(syndObj.getLink())) {
-						log.info("exist url:"+syndObj.getLink());
-						continue;
-					}
-					// 记录RSS行数据
-					RssItemEntity newItem = new RssItemEntity();
-					newItem.setSeedId(seedObj.getId());
-					newItem.setBatchNo(batchNo);
-					newItem.setBizId("");
-					newItem.setTitle(syndObj.getTitle().trim().length() > 250 ? syndObj.getTitle().trim().substring(0,250) : syndObj.getTitle().trim());
-					newItem.setLink(syndObj.getLink() != null ? syndObj.getLink().trim() : null);
-					newItem.setAuthor(syndObj.getAuthor() != null ? syndObj.getAuthor().trim() : null);
-					newItem.setDescription(syndObj.getDescription().getValue() != null ? syndObj.getDescription().getValue().trim() : null);
-					newItem.setPubdate(syndObj.getPublishedDate());
-					// newItem.setFromJson(JSON.toJSONString(syndObj));
-					newItem.setIsBuild("N");
-					newItem.setIsIndex("N");
-					newItem.setCreateBy("sys");
-					newItem.setCreateDate(new Date());
-					rssItemBiz.save(newItem);
-				}
-
-				// 单个RSS网址执行完成-更新日志
-				newLog.setEndTime(new Date());
-				newLog.setStatus("success");
-				String taskTime = ((newLog.getEndTime().getTime() - newLog.getStartTime().getTime()) / 1000) + "s";
-				newLog.setTakeTime(taskTime);
-				newLog.setUpdateBy("sys");
-				newLog.setUpdateDate(new Date());
-				runLogBiz.updateById(newLog);
-			} catch (Exception e) {
-				log.error("抓取异常",e);
-				// 记录异常消息
-				newLog.setEndTime(new Date());
-				newLog.setStatus("fail");
-				newLog.setMsg(ExceptionUtils.getStackTrace(e));
-				String taskTime = ((newLog.getEndTime().getTime() - newLog.getStartTime().getTime()) / 1000) + "s";
-				newLog.setTakeTime(taskTime);
-				newLog.setUpdateBy("sys");
-				newLog.setUpdateDate(new Date());
-				runLogBiz.updateById(newLog);
-			} finally {
-				continue;
-			}
-		}
-
 		// 结束时间
 		long etime = System.currentTimeMillis();
 		System.out.printf("执行时长：%d 秒.", (etime - stime)/1000);//执行时长：1000 毫秒.
 
 	}
 
+	/**
+	 * 根据RSS站点ID来解析
+	 *
+	 * @param id
+	 * @return
+	 */
+	private AjaxResult runBySiteId(String id) {
+		QueryWrapper query = new QueryWrapper<>(new RssSiteEntity()).orderByAsc("create_date");
+		if(StringUtils.isNotEmpty(id)) {
+			query.eq("id",id);
+		}
+		List<RssSiteEntity> list = this.rssSiteBiz.list(query);
+		String batchNo = DateUtil.dateToString(new Date(), "yyyyMMddhhmmss SSSSSS");
+		int factCount = 0;
+		for(RssSiteEntity siteObj : list) {
+			boolean isUpdateSite = false;
+			List<RssSeedEntity> seedList = rssSeedBiz.list(new QueryWrapper<>(new RssSeedEntity().setSiteId(siteObj.getId())).orderByAsc("create_date"));
+			for(RssSeedEntity seedObj : seedList) {
+				AjaxResult<RssRunLogEntity> seedRes = this.runBySeedObj(batchNo,siteObj,isUpdateSite,seedObj);
+				factCount = factCount + seedRes.getData().getFactRows();
+				isUpdateSite = true;
+			}
+			// 更新站点信息
+			seedList.sort((a,b)-> a.getLastPubdate().compareTo(b.getLastPubdate()));
+			siteObj.setLastPubdate(seedList.get(0).getLastPubdate());
+			siteObj.setUpdateBy("sys");
+			siteObj.setUpdateDate(new Date());
+			this.rssSiteBiz.updateById(siteObj);
+		}
+		return AjaxResult.success(factCount+""); // 返回成功记录数
+	}
+
+	/**
+	 * 根据SEED_ID来解析
+	 *
+	 * @param id
+	 * @return
+	 */
+	private AjaxResult runBySeedId(String id) {
+		String batchNo = DateUtil.dateToString(new Date(), "yyyyMMddhhmmss SSSSSS");
+		RssSeedEntity seedObj = this.rssSeedBiz.getById(id);
+		return this.runBySeedObj(batchNo,null,false,seedObj);
+	}
+
+	/**
+	 * 根据SEED对象来解析
+	 *
+	 * @param batchNo
+	 * @param siteObj
+	 * @param isUpdateSite
+	 * @param seedObj
+	 * @return
+	 */
+	private AjaxResult<RssRunLogEntity> runBySeedObj(String batchNo,RssSiteEntity siteObj,boolean isUpdateSite,RssSeedEntity seedObj) {
+		// 记录运行日志
+		RssRunLogEntity newLog = new RssRunLogEntity();
+		newLog.setBatchNo(batchNo);
+		newLog.setDatasouce("seed");
+		newLog.setDatasouceId(seedObj.getId());
+		newLog.setStartTime(new Date());
+		newLog.setStatus("run"); // 运行中
+		newLog.setCreateBy("sys");
+		newLog.setCreateDate(new Date());
+		runLogBiz.save(newLog);
+		try {
+			// 获取RSS行数据
+			SyndFeed feedObj = RssUtil.praseXml(seedObj.getUrl());
+			if(siteObj != null && !isUpdateSite) { // 更新RSS站点信息
+				siteObj.setName(feedObj.getGenerator());
+				siteObj.setAuthor(feedObj.getAuthor());
+				siteObj.setThumbnailPath(feedObj.getImage().getUrl());
+				siteObj.setThumbnailDesc(feedObj.getImage().getDescription());
+				siteObj.setCopyright(feedObj.getCopyright());
+			}
+			List<SyndEntry> syndList = feedObj.getEntries();
+			List<SyndEntry> shouldList = syndList.stream().filter(s-> s.getPublishedDate().compareTo(feedObj.getPublishedDate()) > 0).collect(Collectors.toList());
+			shouldList.sort((a,b)-> a.getPublishedDate().compareTo(b.getPublishedDate()));
+			log.info("fileRows="+syndList.size());
+			log.info("shouldRow ="+shouldList.size());
+			int factCount = this.convert2RssItem(batchNo,seedObj,shouldList);
+			log.info("factCount ="+factCount);
+
+			// 更新SEED对象
+			seedObj.setUpdateBy("sys");
+			seedObj.setUpdateDate(new Date());
+			seedObj.setLastPubdate(shouldList.get(0).getPublishedDate());
+			this.rssSeedBiz.updateById(seedObj);
+			// 单个RSS网址执行完成-更新日志
+			newLog.setLastPubdate(seedObj.getLastPubdate());
+			newLog.setFileRows(syndList.size());
+			newLog.setShouldRows(0);
+			newLog.setFactRows(factCount);
+			newLog.setEndTime(new Date());
+			newLog.setStatus("success");
+			String taskTime = ((newLog.getEndTime().getTime() - newLog.getStartTime().getTime()) / 1000) + "s";
+			newLog.setTakeTime(taskTime);
+			newLog.setUpdateBy("sys");
+			newLog.setUpdateDate(new Date());
+			runLogBiz.updateById(newLog);
+		} catch (Exception e) {
+			log.error("抓取异常",e);
+			// 记录异常消息
+			newLog.setEndTime(new Date());
+			newLog.setStatus("fail");
+			newLog.setMsg(ExceptionUtils.getStackTrace(e));
+			String taskTime = ((newLog.getEndTime().getTime() - newLog.getStartTime().getTime()) / 1000) + "s";
+			newLog.setTakeTime(taskTime);
+			newLog.setUpdateBy("sys");
+			newLog.setUpdateDate(new Date());
+			runLogBiz.updateById(newLog);
+		}
+		return AjaxResult.success(newLog); // 返回成功标识，具体的见log对象的status
+	}
+
+	/**
+	 * RSS行记录转换为结构化数据并保存
+	 *
+	 * @param batchNo
+	 * @param seedObj
+	 * @param syndList
+	 * @return
+	 */
+	private int convert2RssItem(String batchNo, RssSeedEntity seedObj, List<SyndEntry> syndList) {
+		int result = 0;
+		log.info("syndList.size()="+syndList.size());
+		for(int s=0;s<syndList.size();s++) {
+			try {
+				int index = (s+1);
+				log.info("SyndEntry Execute index ="+index);
+				SyndEntry syndObj = syndList.get(s);
+				// 判断URL是否已经存在
+				if(this.rssItemBiz.isExist(syndObj.getLink())) {
+					log.info("exist url:"+syndObj.getLink());
+					continue;
+				}
+				// 记录RSS行数据
+				RssItemEntity newItem = new RssItemEntity();
+				newItem.setSiteId(seedObj.getSiteId());
+				newItem.setSeedId(seedObj.getId());
+				newItem.setCategoryId(seedObj.getCategoryId());
+				newItem.setCategoryName(seedObj.getCategoryName());
+				newItem.setBatchNo(batchNo);
+				newItem.setBizId("");
+				newItem.setTitle(syndObj.getTitle().trim().length() > 250 ? syndObj.getTitle().trim().substring(0,250) : syndObj.getTitle().trim());
+				newItem.setLink(syndObj.getLink() != null ? syndObj.getLink().trim() : null);
+				newItem.setAuthor(syndObj.getAuthor() != null ? syndObj.getAuthor().trim() : null);
+				newItem.setDescription(syndObj.getDescription().getValue() != null ? syndObj.getDescription().getValue().trim() : null);
+				newItem.setPubdate(syndObj.getPublishedDate());
+				// newItem.setFromJson(JSON.toJSONString(syndObj));
+				newItem.setIsBuild("N");
+				newItem.setIsIndex("N");
+				newItem.setCreateBy("sys");
+				newItem.setCreateDate(new Date());
+				this.rssItemBiz.save(newItem);
+				result++;
+			} catch(Exception e) {
+				log.error("convertBySyndEntry异常",e);
+			}
+		}
+		return result;
+	}
 
 }

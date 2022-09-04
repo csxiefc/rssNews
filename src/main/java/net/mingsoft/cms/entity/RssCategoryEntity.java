@@ -11,17 +11,17 @@ import net.mingsoft.base.entity.BaseEntity;
 
 /**
  * <p>
- * RSS搜索行为记录
+ * RSS信息分类
  * </p>
  *
  * @author xiefc
- * @since 2022-08-27
+ * @since 2022-09-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("rss_search_log")
-public class RssSearchLogEntity extends BaseEntity {
+@TableName("rss_category")
+public class RssCategoryEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,63 +42,52 @@ public class RssSearchLogEntity extends BaseEntity {
     }
 
     /**
-     * 业务类型 搜索SEARCH/查看VIEW
+     * 分类编码
      */
-    @TableField("biz_type")
-    private String bizType;
+    @TableField("code")
+    private String code;
 
     /**
-     * 业务ID
+     * 分类名称
      */
-    @TableField("biz_id")
-    private String bizId;
+    @TableField("name")
+    private String name;
 
     /**
-     * 请求ID
+     * 父分类ID
      */
-    @TableField("requestId")
-    private String requestId;
+    @TableField("parent_id")
+    private String parentId;
 
     /**
-     * 搜索内容
+     * 父分类编码
      */
-    @TableField("content")
-    private String content;
+    @TableField("parent_code")
+    private String parentCode;
 
     /**
-     * IP地址
+     * 父分类名称
      */
-    @TableField("ip")
-    private String ip;
+    @TableField("parent_name")
+    private String parentName;
 
     /**
-     * 所属位置
+     * 缩略图路径
      */
-    @TableField("posname")
-    private String posname;
+    @TableField("thumbnail_path")
+    private String thumbnailPath;
 
     /**
-     * 浏览器
+     * 缩略图文字说明
      */
-    @TableField("browser")
-    private String browser;
-
-    /**
-     * 状态 Y成功 N异常
-     */
-    @TableField("status")
-    private String status;
-
-    /**
-     * 引用
-     */
-    @TableField("referer")
-    private String referer;
+    @TableField("thumbnail_desc")
+    private String thumbnailDesc;
 
     /**
      * 备注
      */
     @TableField("remark")
     private String remark;
+
 
 }

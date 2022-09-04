@@ -23,6 +23,8 @@
 				<result column="update_by" property="updateBy" /><!--修改人 -->
 				<result column="update_date" property="updateDate" /><!--修改时间 -->
 				<result column="del" property="del" /><!--删除标记 -->
+		<result column="datasource" property="datasource" />
+		<result column="datasource_id" property="datasourceId" />
 	</resultMap>
 
 	<resultMap id="resultContentMap" type="net.mingsoft.cms.bean.ContentBean">
@@ -98,6 +100,8 @@
 				<if test="updateBy &gt; 0">update_by,</if>
 				<if test="updateDate != null">update_date,</if>
 				<if test="del != null">del,</if>
+			<if test="datasource != null and datasource != ''">datasource,</if>
+			<if test="datasourceId != null and datasourceId != ''">datasource_id,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 				<if test="contentTitle != null and contentTitle != ''">#{contentTitle},</if>
@@ -119,6 +123,8 @@
 				<if test="updateBy &gt; 0">#{updateBy},</if>
 				<if test="updateDate != null">#{updateDate},</if>
 				<if test="del != null">#{del},</if>
+			<if test="datasource != null">#{datasource},</if>
+			<if test="datasourceId != null">#{datasourceId},</if>
 		</trim>
 	</insert>
 

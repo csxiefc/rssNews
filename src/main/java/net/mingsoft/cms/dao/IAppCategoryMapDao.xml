@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.mingsoft.cms.dao.IAppCategoryMapDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.mingsoft.cms.entity.AppCategoryMapEntity">
+        <id column="id" property="id" />
+        <result column="app_name" property="appName" />
+        <result column="app_category_id" property="appCategoryId" />
+        <result column="app_category_name" property="appCategoryName" />
+        <result column="rss_category_id" property="rssCategoryId" />
+        <result column="rss_category_code" property="rssCategoryCode" />
+        <result column="rss_category_name" property="rssCategoryName" />
+        <result column="remark" property="remark" />
+        <result column="del" property="del" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, app_name, app_category_id, app_category_name, rss_category_id, rss_category_code, rss_category_name, remark, del, create_by, create_date, update_by, update_date
+    </sql>
+
+</mapper>

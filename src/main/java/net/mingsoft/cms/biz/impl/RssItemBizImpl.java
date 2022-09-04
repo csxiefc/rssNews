@@ -1,15 +1,19 @@
 package net.mingsoft.cms.biz.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.rometools.rome.feed.synd.SyndEntry;
+import lombok.extern.slf4j.Slf4j;
 import net.mingsoft.base.biz.impl.BaseBizImpl;
 import net.mingsoft.base.dao.IBaseDao;
 import net.mingsoft.cms.biz.IRssItemBiz;
 import net.mingsoft.cms.dao.IRssItemDao;
 import net.mingsoft.cms.entity.RssItemEntity;
+import net.mingsoft.cms.entity.RssSeedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -19,6 +23,7 @@ import java.util.Date;
  * @author xiefc
  * @since 2022-08-27
  */
+@Slf4j
 @Service("cmsRssItemBizImpl")
 public class RssItemBizImpl  extends BaseBizImpl<IRssItemDao, RssItemEntity> implements IRssItemBiz {
 
@@ -43,5 +48,45 @@ public class RssItemBizImpl  extends BaseBizImpl<IRssItemDao, RssItemEntity> imp
         QueryWrapper query = new QueryWrapper(new RssItemEntity().setLink(url));
         int count = this.dao.selectCount(query);
         return count > 0 ? true :false;
+    }
+
+    public int convertBySyndEntry(String batchNo, RssSeedEntity seedObj, List<SyndEntry> syndList) {
+        int result = 0;
+        log.info("syndList.size()="+syndList.size());
+        for(int s=0;s<syndList.size();s++) {
+            try {
+                int index = (s+1);
+                log.info("SyndEntry Execute index ="+index);
+                SyndEntry syndObj = syndList.get(s);
+                // 判断URL是否已经存在
+                if(this.isExist(syndObj.getLink())) {
+                    log.info("exist url:"+syndObj.getLink());
+                    continue;
+                }
+                // 记录RSS行数据
+                RssItemEntity newItem = new RssItemEntity();
+                newItem.setSiteId(seedObj.getSiteId());
+                newItem.setSeedId(seedObj.getId());
+                newItem.setCategoryId(seedObj.getCategoryId());
+                newItem.setCategoryName(seedObj.getCategoryName());
+                newItem.setBatchNo(batchNo);
+                newItem.setBizId("");
+                newItem.setTitle(syndObj.getTitle().trim().length() > 250 ? syndObj.getTitle().trim().substring(0,250) : syndObj.getTitle().trim());
+                newItem.setLink(syndObj.getLink() != null ? syndObj.getLink().trim() : null);
+                newItem.setAuthor(syndObj.getAuthor() != null ? syndObj.getAuthor().trim() : null);
+                newItem.setDescription(syndObj.getDescription().getValue() != null ? syndObj.getDescription().getValue().trim() : null);
+                newItem.setPubdate(syndObj.getPublishedDate());
+                // newItem.setFromJson(JSON.toJSONString(syndObj));
+                newItem.setIsBuild("N");
+                newItem.setIsIndex("N");
+                newItem.setCreateBy("sys");
+                newItem.setCreateDate(new Date());
+                this.save(newItem);
+                result++;
+            } catch(Exception e) {
+                log.error("convertBySyndEntry异常",e);
+            }
+        }
+        return result;
     }
 }

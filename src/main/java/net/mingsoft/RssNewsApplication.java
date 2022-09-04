@@ -40,13 +40,13 @@ import java.util.Locale;
 @SpringBootApplication(scanBasePackages = {"net.mingsoft"})
 @MapperScan(basePackages={"**.dao","com.baomidou.**.mapper"})
 @ServletComponentScan(basePackages = {"net.mingsoft"})
-public class MSApplication {
+public class RssNewsApplication {
 	static {
 		System.setProperty("druid.mysql.usePingMethod","false");
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(MSApplication.class, args);
+		SpringApplication.run(RssNewsApplication.class, args);
 	}
 
 	@Bean
