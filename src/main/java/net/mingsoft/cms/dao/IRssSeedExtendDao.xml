@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.mingsoft.cms.dao.IRssSeedExtendDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.mingsoft.cms.entity.RssSeedExtendEntity">
+        <result column="id" property="id" />
+        <result column="seed_id" property="seedId" />
+        <result column="parent_id" property="parentId" />
+        <result column="rlevle" property="rlevle" />
+        <result column="categoryId" property="categoryId" />
+        <result column="categoryName" property="categoryName" />
+        <result column="urlType" property="urlType" />
+        <result column="url" property="url" />
+        <result column="crackClazz" property="crackClazz" />
+        <result column="weight" property="weight" />
+        <result column="remark" property="remark" />
+        <result column="createId" property="createId" />
+        <result column="createBy" property="createBy" />
+        <result column="createTime" property="createTime" />
+        <result column="updateId" property="updateId" />
+        <result column="updateBy" property="updateBy" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, seed_id, parent_id, rlevle, categoryId, categoryName, urlType, url, crackClazz, weight, remark, createId, createBy, createTime, updateId, updateBy, updateTime
+    </sql>
+
+
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.mingsoft.cms.dao.IRssSearchLogDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.mingsoft.cms.entity.RssSearchLogEntity">
+        <result column="id" property="id" />
+        <result column="content" property="content" />
+        <result column="ip" property="ip" />
+        <result column="browser" property="browser" />
+        <result column="remark" property="remark" />
+        <result column="createId" property="createId" />
+        <result column="createBy" property="createBy" />
+        <result column="createTime" property="createTime" />
+        <result column="updateId" property="updateId" />
+        <result column="updateBy" property="updateBy" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, content, ip, browser, remark, createId, createBy, createTime, updateId, updateBy, updateTime
+    </sql>
+
+
+
+</mapper>
