@@ -128,12 +128,6 @@ public class RssItemEntity extends BaseEntity {
     private String description;
 
     /**
-     * 来源JSON
-     */
-    @TableField("fromJson")
-    private String fromJson;
-
-    /**
      * 网址内容
      */
     @TableField("link_content")

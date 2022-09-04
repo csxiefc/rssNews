@@ -90,7 +90,9 @@ public class SplierController {
 		List<CompletableFuture<Integer>> futures = new ArrayList<>();
 		for(RssSiteEntity siteObj : list) {
 			//并行线程调用 提供执行效率，为每一个RSS SITE启一个线程
-			futures.add(CompletableFuture.supplyAsync(() -> crawlByRssSiteObj(siteObj,rebuild), executor));
+			if(StringUtils.isNotEmpty(siteObj.getParseConf())) {
+				futures.add(CompletableFuture.supplyAsync(() -> crawlByRssSiteObj(siteObj,rebuild), executor));
+			}
 		}
 		//等待全部完成
 		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();

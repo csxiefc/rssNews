@@ -47,6 +47,9 @@ public class RssSpiderService {
         int factCount = 0;
         boolean isUpdateSite = false;
         List<RssSeedEntity> seedList = rssSeedBiz.list(new QueryWrapper<>(new RssSeedEntity().setSiteId(siteObj.getId())).orderByAsc("create_date"));
+        if(seedList.size() == 0) {
+            return factCount;
+        }
         for(RssSeedEntity seedObj : seedList) {
             AjaxResult<RssRunLogEntity> seedRes = this.runBySeedObj(batchNo,siteObj,isUpdateSite,seedObj);
             factCount = factCount + seedRes.getData().getFactRows();
@@ -102,8 +105,8 @@ public class RssSpiderService {
             if(siteObj != null && !isUpdateSite) { // 更新RSS站点信息
                 siteObj.setName(feedObj.getGenerator());
                 siteObj.setAuthor(feedObj.getAuthor());
-                siteObj.setThumbnailPath(feedObj.getImage().getUrl()); // 网站LOGO图片
-                siteObj.setThumbnailDesc(feedObj.getImage().getDescription());
+                siteObj.setThumbnailPath(feedObj.getImage() != null ? feedObj.getImage().getUrl() : null); // 网站LOGO图片
+                siteObj.setThumbnailDesc(feedObj.getImage() != null ? feedObj.getImage().getDescription() : null);
                 siteObj.setCopyright(feedObj.getCopyright());
             }
             List<SyndEntry> syndList = feedObj.getEntries();
