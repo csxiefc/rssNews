@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>文章</title>
-	<#include "../../include/head-file.ftl2">
+	<#include "../../include/head-file.ftl">
 </head>
 <body style="overflow: hidden">
 <div id="index"  v-cloak>

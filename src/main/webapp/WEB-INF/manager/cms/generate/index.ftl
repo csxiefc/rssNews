@@ -66,6 +66,25 @@
                         </div>
                     </el-form-item>
                 </div>
+                <div class="class-14" >
+                    <el-form-item label="文章主键">
+                        <el-input v-model="articleId" ></el-input>
+                        <div class="ms-form-tip">
+                            文章表cms_content的主键
+                        </div>
+                    </el-form-item>
+                </div>
+                <div class="class-14" >
+                    <el-form-item label="是否重建">
+                        <el-select v-model="isRebuild" >
+                            <el-option key="false" label="false" value="false"></el-option>
+                            <el-option key="true" label="true" value="true"></el-option>
+                        </el-select>
+                        <div class="ms-form-tip">
+                            否重新生成，针对生成文章；若是已经生成的HTML页面，值为false就不再生成。
+                        </div>
+                    </el-form-item>
+                </div>
                 <div class="class-17" >
                     <el-form-item label="指定时间">
                         <el-date-picker
@@ -77,10 +96,10 @@
                                 :disabled="false"
                                 :editable="false"
                                 :clearable="false"
-                                format="yyyy-MM-dd"
-                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
                                 :style="{width:'100%'}"
-                                type="date">
+                                type="datetime">
                         </el-date-picker>
                         <div class="ms-form-tip">
                             根据内容的发布时间来生成，例如：2021-01-01，则生成21年01月01号以后发布的文章，如果遇到内容没有生成可以调整时间
@@ -142,6 +161,10 @@
             contentSection: '0',
             //文章栏目
             section: '0',
+            // 文章ID
+            articleId: '',
+            // 是否重新生成，针对生成文章；若是已经生成的HTML页面，就不再生成
+            isRebuild: false,
             //栏目
             time: ms.util.date.fmt(new Date(), "yyyy-MM-dd"),
             treeList: [{
@@ -223,7 +246,9 @@
                 var that = this;
                 that.articleLoading = true;
                 ms.http.post(ms.manager + '/cms/generate/' + (that.contentSection ? that.contentSection : 0) + '/generateArticle.do', {
-                    dateTime: that.time
+                    dateTime: that.time,
+                    id:that.articleId,
+                    reBuild:that.isRebuild
                 }).then(function (data) {
                     if (data.result) {
                         that.$notify({

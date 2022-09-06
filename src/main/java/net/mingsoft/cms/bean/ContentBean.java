@@ -64,6 +64,17 @@ public class ContentBean extends ContentEntity {
      */
     private String categoryFlag;
 
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
     public String getCategoryType() {
         return categoryType;
     }

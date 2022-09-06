@@ -259,6 +259,10 @@
 			LEFT JOIN cms_category c ON ct.category_id = c.id
 			where ct.del=0
 
+			<!-- 文章唯一ID -->
+			<if test="id!=null and  id!=''">
+				and ct.id = #{id}
+			</if>
 			<!-- 查询子栏目数据 -->
 			<if test="categoryId!=null and  categoryId!='' and categoryType==1">
 				and (ct.category_id=#{categoryId} or ct.category_id in

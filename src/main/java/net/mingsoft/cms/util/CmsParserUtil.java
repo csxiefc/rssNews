@@ -191,7 +191,7 @@ public class CmsParserUtil {
      * @throws MalformedTemplateNameException
      * @throws TemplateNotFoundException
      */
-    public static void generateBasic(List<CategoryBean> articleIdList, String htmlDir) {
+    public static void generateBasic(List<CategoryBean> articleIdList, String htmlDir, boolean reBuild) {
 
         Map<String, Object> parserParams = new HashMap<String, Object>();
         parserParams.put(ParserUtil.IS_DO, false);
@@ -258,6 +258,11 @@ public class CmsParserUtil {
                 writePath = ParserUtil.buildHtmlPath(articleColumnPath + File.separator + articleId, htmlDir, parserParams.get(ParserUtil.APP_DIR).toString());
             }
 
+            // 实体文件已经生成且 标识重新生成为false的情况下，跳过此记录
+            File fileObj = new File(writePath);
+            if(fileObj.exists() && !reBuild) {
+                continue;
+            }
 
             parserParams.put(ParserUtil.COLUMN, categoryBean);
 

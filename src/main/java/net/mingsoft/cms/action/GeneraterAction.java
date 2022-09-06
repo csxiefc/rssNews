@@ -208,7 +208,7 @@ public class GeneraterAction extends BaseAction {
                         BeanUtil.copyProperties(column, columnArticleIdBean, copyOptions);
                         articleIdList.add(columnArticleIdBean);
                     }
-                    CmsParserUtil.generateBasic(articleIdList, htmlDir);
+                    CmsParserUtil.generateBasic(articleIdList, htmlDir, true);
                     break;
             }
         }
@@ -227,7 +227,11 @@ public class GeneraterAction extends BaseAction {
     @RequiresPermissions("cms:generate:article")
     @LogAnn(title = "生成文章", businessType = BusinessTypeEnum.UPDATE)
     @ResponseBody
-    public ResultData generateArticle(HttpServletRequest request, HttpServletResponse response, @PathVariable String columnId) throws IOException {
+    public ResultData generateArticle(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      @PathVariable String columnId,
+                                      String id,
+                                      boolean reBuild) throws IOException {
         String dateTime = request.getParameter("dateTime");
         // 网站风格物理路径
         List<CategoryBean> articleIdList = null;
@@ -248,6 +252,7 @@ public class GeneraterAction extends BaseAction {
             if (category.getCategoryType().equals(CategoryTypeEnum.LINK.toString())) {
                 continue;
             }
+            contentBean.setId(id);
             contentBean.setCategoryId(category.getId());
             contentBean.setCategoryType(category.getCategoryType());
             //将文章列表标签中的中的参数
@@ -264,7 +269,7 @@ public class GeneraterAction extends BaseAction {
             }
             // 有符合条件的就更新
             if (articleIdList.size() > 0) {
-                CmsParserUtil.generateBasic(articleIdList, htmlDir);
+                CmsParserUtil.generateBasic(articleIdList, htmlDir,reBuild);
             }
         }
 
