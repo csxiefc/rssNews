@@ -25,6 +25,9 @@
 				<result column="del" property="del" /><!--删除标记 -->
 		<result column="datasource" property="datasource" />
 		<result column="datasource_id" property="datasourceId" />
+		<result column="is_build" property="isBuild" />
+		<result column="build_datetime" property="buildDatetime" />
+
 	</resultMap>
 
 	<resultMap id="resultContentMap" type="net.mingsoft.cms.bean.ContentBean">
@@ -102,6 +105,8 @@
 				<if test="del != null">del,</if>
 			<if test="datasource != null and datasource != ''">datasource,</if>
 			<if test="datasourceId != null and datasourceId != ''">datasource_id,</if>
+			<if test="isBuild != null ">is_build,</if>
+			<if test="buildDatetime != null ">build_datetime,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 				<if test="contentTitle != null and contentTitle != ''">#{contentTitle},</if>
@@ -125,6 +130,8 @@
 				<if test="del != null">#{del},</if>
 			<if test="datasource != null">#{datasource},</if>
 			<if test="datasourceId != null">#{datasourceId},</if>
+			<if test="isBuild != null">#{isBuild},</if>
+			<if test="buildDatetime != null">#{buildDatetime},</if>
 		</trim>
 	</insert>
 
@@ -151,6 +158,9 @@
 				<if test="updateBy &gt; 0">update_by=#{updateBy},</if>
 				<if test="updateDate != null">update_date=#{updateDate},</if>
 				<if test="del != null">del=#{del},</if>
+
+				<if test="isBuild != null">is_build=#{isBuild},</if>
+				<if test="buildDatetime != null">build_datetime=#{buildDatetime},</if>
 			</set>
 			where id = #{id}
 		</update>
@@ -262,6 +272,10 @@
 			<!-- 文章唯一ID -->
 			<if test="id!=null and  id!=''">
 				and ct.id = #{id}
+			</if>
+			<!-- 是否重建 -->
+			<if test="isBuild !=null ">
+				and ct.is_build = #{isBuild}
 			</if>
 			<!-- 查询子栏目数据 -->
 			<if test="categoryId!=null and  categoryId!='' and categoryType==1">

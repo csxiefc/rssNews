@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j.version>2.17.0</log4j.version>
+        <p6spy.version>3.9.1</p6spy.version>
     </properties>
     <repositories>
         <repository>
@@ -144,6 +145,12 @@
             <artifactId>JsoupXpath</artifactId>
             <version>2.2.1</version>
         </dependency>
+        <!-- sql性能分析插件 -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>${p6spy.version}</version>
+        </dependency>
 
 
     </dependencies>
@@ -152,7 +159,7 @@
         <finalName>${project.artifactId}</finalName>
         <resources>
             <resource>
-                <directory>src/main/webapp</directory>
+                <directory>${project.basedir}/src/main/webapp</directory>
 
                 <!--打包生产jar包推荐启用下面配置-->
                 <!--打包生产war包不启用下面配置-->
@@ -160,10 +167,10 @@
                     <!-- 可以避免将静态资源打入jar包中，方便生产实时修改静态资源文件-->
                     <!-- 打包生产建议并手动将static、html、upload、template复制到生产 -->
                     <!-- -->
-                    <exclude>/static/</exclude>
-                    <exclude>/html/</exclude>
-                    <exclude>/upload/</exclude>
-                    <exclude>/template/</exclude>
+                    <exclude>static</exclude>
+                    <exclude>html</exclude>
+                    <exclude>upload</exclude>
+                    <exclude>template</exclude>
 
                     <!-- 如果生产需要实时修改WEB-INF/下的页面可，启用这行并手动将项目中的WEB-INF目录复制到运行环境 -->
                     <!--<exclude>WEB-INF/</exclude>-->
@@ -203,6 +210,13 @@
                      <verbose/>
                      <bootclasspath>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</bootclasspath>
                  </compilerArguments>
+                 <excludes>
+                     <!-- 去除指定的包，及其包下的类-->
+                     <exclude>/webapp/html/</exclude>
+                     <exclude>/webapp/static/</exclude>
+                     <exclude>/webapp/template/</exclude>
+                     <exclude>/webapp/upload/</exclude>
+                 </excludes>
              </configuration>
              <dependencies>
                  <dependency>

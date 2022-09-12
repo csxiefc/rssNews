@@ -56,10 +56,16 @@ spring:
   data:
     solr:
       username: cshongye
-      password: Aa123456@
-      host: http://101.34.78.152:8983/solr/new_core/
+      password: SolrRocks
+      host: http://101.34.78.152/solr/new_core/
 client:
   auth:
     includeReferer: http://localhost:8087/,http://101.34.78.152:8087/,http://www.grow2up.online:8087/
     headerName: rss
     headerValue: 5338244087b8cfa5906d76713f0528ee1f27cc24dfd9dcf549af51894a54c5cc1c839275258397030b3cf7263a51af4e
+datacenter:
+  auth:
+    host: http://localhost:8087
+    trans: /rss-data/execute
+    headerName: siteReq
+    headerValue: Bearer 5338244087b8cfa5906d76713f0528ee1f27cc24dfd9dcf549af51894a54c5cc1c839275258397030b3cf7263a51af4e7788

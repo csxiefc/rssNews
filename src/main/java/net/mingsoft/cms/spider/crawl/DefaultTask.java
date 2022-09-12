@@ -1,4 +1,4 @@
-package net.mingsoft.cms.spider;
+package net.mingsoft.cms.spider.crawl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,6 @@ import us.codecraft.webmagic.Spider;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component

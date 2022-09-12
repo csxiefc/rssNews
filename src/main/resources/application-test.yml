@@ -9,5 +9,5 @@ spring:
   data:
     solr:
       username: cshongye
-      password: Aa123456@
-      host: http://101.34.78.152:8983/solr/new_core/
+      password: SolrRocks
+      host: http://101.34.78.152/solr/new_core/

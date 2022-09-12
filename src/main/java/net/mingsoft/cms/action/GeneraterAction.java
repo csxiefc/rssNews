@@ -27,6 +27,8 @@ package net.mingsoft.cms.action;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.io.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import net.mingsoft.base.entity.ResultData;
 import net.mingsoft.basic.annotation.LogAnn;
 import net.mingsoft.basic.biz.IModelBiz;
@@ -39,15 +41,14 @@ import net.mingsoft.cms.biz.ICategoryBiz;
 import net.mingsoft.cms.biz.IContentBiz;
 import net.mingsoft.cms.constant.e.CategoryTypeEnum;
 import net.mingsoft.cms.entity.CategoryEntity;
+import net.mingsoft.cms.entity.ContentEntity;
 import net.mingsoft.cms.util.CmsParserUtil;
 import net.mingsoft.mdiy.util.ParserUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,10 +69,11 @@ import java.util.List;
  * @date: 2018年1月31日 下午2:52:07
  * @Copyright: 2018 www.mingsoft.net Inc. All rights reserved.
  */
+@Slf4j
 @ApiIgnore
 @Controller("cmsGenerater")
 @RequestMapping("/${ms.manager.path}/cms/generate")
-@Scope("request")
+// @Scope("request")
 public class GeneraterAction extends BaseAction {
 
     /*
@@ -120,12 +123,15 @@ public class GeneraterAction extends BaseAction {
      * @param response
      */
     @RequestMapping(value = "/generateIndex", method = {RequestMethod.GET, RequestMethod.POST})
-    @RequiresPermissions("cms:generate:index")
+    // @RequiresPermissions("cms:generate:index")
     @LogAnn(title = "生成主页", businessType = BusinessTypeEnum.UPDATE)
     @ResponseBody
     public ResultData generateIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 模版文件名称
-        String tmpFileName = request.getParameter("url");
+        String tmpFileName = "index.htm";
+        if(StringUtils.isNotEmpty(request.getParameter("url"))) {
+            tmpFileName = request.getParameter("url");
+        }
         // 生成后的文件名称
         String generateFileName = request.getParameter("position");
 
@@ -149,9 +155,12 @@ public class GeneraterAction extends BaseAction {
      */
     @RequestMapping(value = "/{categoryId}/genernateColumn", method = {RequestMethod.GET, RequestMethod.POST})
     @LogAnn(title = "生成栏目", businessType = BusinessTypeEnum.UPDATE)
-    @RequiresPermissions("cms:generate:column")
+    // @RequiresPermissions("cms:generate:column")
     @ResponseBody
-    public ResultData genernateColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable String categoryId) throws IOException {
+    public ResultData genernateColumn(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      @PathVariable String categoryId,
+                                      boolean reBuild) throws IOException {
         // 获取站点id
         AppEntity app = BasicUtil.getApp();
 
@@ -179,6 +188,7 @@ public class GeneraterAction extends BaseAction {
             ContentBean contentBean = new ContentBean();
             contentBean.setCategoryId(column.getId());
             contentBean.setCategoryType(column.getCategoryType());
+            contentBean.setIsBuild(reBuild ? null : "N"); // 是否重新静态化，参数为reBuild=false的情况下 cms_content的is_build有效过滤
             articleIdList = contentBiz.queryIdsByCategoryIdForParser(contentBean);
             // 判断列表类型
             switch (CategoryTypeEnum.get(column.getCategoryType())) {
@@ -208,7 +218,8 @@ public class GeneraterAction extends BaseAction {
                         BeanUtil.copyProperties(column, columnArticleIdBean, copyOptions);
                         articleIdList.add(columnArticleIdBean);
                     }
-                    CmsParserUtil.generateBasic(articleIdList, htmlDir, true);
+                    List<String> updateIds = CmsParserUtil.generateBasic(articleIdList, htmlDir, reBuild);
+                    this.updateBuildFlag(updateIds); // 更新文章静态化标识
                     break;
             }
         }
@@ -224,7 +235,7 @@ public class GeneraterAction extends BaseAction {
      * @param columnId
      */
     @RequestMapping(value = "/{columnId}/generateArticle", method = {RequestMethod.GET, RequestMethod.POST})
-    @RequiresPermissions("cms:generate:article")
+   // @RequiresPermissions("cms:generate:article")
     @LogAnn(title = "生成文章", businessType = BusinessTypeEnum.UPDATE)
     @ResponseBody
     public ResultData generateArticle(HttpServletRequest request,
@@ -255,6 +266,8 @@ public class GeneraterAction extends BaseAction {
             contentBean.setId(id);
             contentBean.setCategoryId(category.getId());
             contentBean.setCategoryType(category.getCategoryType());
+            contentBean.setIsBuild(reBuild ? null : "N"); // 是否重新静态化，参数为reBuild=false的情况下 cms_content的is_build有效过滤
+            contentBean.setOrderBy("date");
             //将文章列表标签中的中的参数
             articleIdList = contentBiz.queryIdsByCategoryIdForParser(contentBean);
             // 分类是列表
@@ -269,7 +282,8 @@ public class GeneraterAction extends BaseAction {
             }
             // 有符合条件的就更新
             if (articleIdList.size() > 0) {
-                CmsParserUtil.generateBasic(articleIdList, htmlDir,reBuild);
+               List<String> updateIds = CmsParserUtil.generateBasic(articleIdList, htmlDir,reBuild);
+               this.updateBuildFlag(updateIds); // 更新文章静态化标识
             }
         }
 
@@ -277,6 +291,22 @@ public class GeneraterAction extends BaseAction {
         return ResultData.build().success();
     }
 
+
+    private int updateBuildFlag(List<String> updateIds) {
+        int count = 0;
+        if(updateIds.size() == 0) {
+            return count;
+        }
+        for(String updateId : updateIds) { // 更新静态化标识字段
+            ContentEntity updateObj = new ContentEntity();
+            updateObj.setIsBuild("Y");
+            updateObj.setBuildDatetime(new Date());
+            updateObj.setUpdateDate(new Date());
+            this.contentBiz.update(updateObj,new QueryWrapper<ContentEntity>().eq("id",updateId));
+            count++;
+        }
+        return count;
+    }
 
     /**
      * 用户预览主页
@@ -292,4 +322,7 @@ public class GeneraterAction extends BaseAction {
                 + File.separator + position + ParserUtil.HTML_SUFFIX;
         return "redirect:" + indexPosition;
     }
+
+
+
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.mingsoft.cms.mapper.AppCategoryTransLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.mingsoft.cms.entity.AppCategoryTransLogEntity">
+        <id column="id" property="id" />
+        <result column="batchNo" property="batchNo" />
+        <result column="map_id" property="mapId" />
+        <result column="app_id" property="appId" />
+        <result column="app_category_id" property="appCategoryId" />
+        <result column="app_category_name" property="appCategoryName" />
+        <result column="rss_category_id" property="rssCategoryId" />
+        <result column="rss_category_code" property="rssCategoryCode" />
+        <result column="rss_category_name" property="rssCategoryName" />
+        <result column="last_sync_date" property="lastSyncDate" />
+        <result column="content" property="content" />
+        <result column="file_rows" property="fileRows" />
+        <result column="should_rows" property="shouldRows" />
+        <result column="fact_rows" property="factRows" />
+        <result column="startTime" property="startTime" />
+        <result column="endTime" property="endTime" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="create_by" property="createBy" />
+        <result column="creator_name" property="creatorName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, batchNo, map_id, app_id, app_category_id, app_category_name, rss_category_id, rss_category_code, rss_category_name, last_sync_date, content, file_rows, should_rows, fact_rows, startTime, endTime, error_msg, status, remark, create_by, creator_name, create_time, update_by, update_time
+    </sql>
+
+</mapper>

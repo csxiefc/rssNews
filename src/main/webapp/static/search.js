@@ -1,1 +1,87 @@
-var __encode ='jsjiami.com',_a={}, _0xb483=["\x5F\x64\x65\x63\x6F\x64\x65","\x68\x74\x74\x70\x3A\x2F\x2F\x77\x77\x77\x2E\x73\x6F\x6A\x73\x6F\x6E\x2E\x63\x6F\x6D\x2F\x6A\x61\x76\x61\x73\x63\x72\x69\x70\x74\x6F\x62\x66\x75\x73\x63\x61\x74\x6F\x72\x2E\x68\x74\x6D\x6C"];(function(_0xd642x1){_0xd642x1[_0xb483[0]]= _0xb483[1]})(_a);var __Oxe9e40=["\x76\x61\x6C","\x23\x6B\x65\x79","\x74\x65\x78\x74","\x23\x6B\x65\x79\x54\x69\x74\x6C\x65","\x2F\x73\x6F\x6C\x72\x2F\x73\x65\x61\x72\x63\x68\x2F\x6B\x65\x79\x51\x75\x65\x72\x79\x3F\x73\x74\x61\x72\x74\x3D","\x26\x72\x6F\x77\x73\x3D","\x26\x6B\x65\x79\x3D","\x61\x70\x70\x6C\x69\x63\x61\x74\x69\x6F\x6E\x2F\x6A\x73\x6F\x6E\x3B\x20\x63\x68\x61\x72\x73\x65\x74\x3D\x75\x74\x66\x2D\x38","\x47\x45\x54","\x72\x73\x73","\x35\x33\x33\x38\x32\x34\x34\x30\x38\x37\x62\x38\x63\x66\x61\x35\x39\x30\x36\x64\x37\x36\x37\x31\x33\x66\x30\x35\x32\x38\x65\x65\x31\x66\x32\x37\x63\x63\x32\x34\x64\x66\x64\x39\x64\x63\x66\x35\x34\x39\x61\x66\x35\x31\x38\x39\x34\x61\x35\x34\x63\x35\x63\x63\x31\x63\x38\x33\x39\x32\x37\x35\x32\x35\x38\x33\x39\x37\x30\x33\x30\x62\x33\x63\x66\x37\x32\x36\x33\x61\x35\x31\x61\x66\x34\x65","\x73\x65\x74\x52\x65\x71\x75\x65\x73\x74\x48\x65\x61\x64\x65\x72","","\x68\x74\x6D\x6C","\x23\x72\x69\x67\x68\x74\x2D\x62\x6F\x64\x79","\x63\x6F\x64\x65","\x6D\x73\x67","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x6E\x65\x77\x73\x2D\x69\x74\x65\x6D\x27\x3E","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x6E\x65\x77\x73\x2D\x63\x6F\x6E\x74\x65\x6E\x74\x27\x3E","\u53D1\u5E03\u65F6\u95F4\uFF1A","\x70\x75\x62\x64\x61\x74\x65","\x20\u6536\u5F55\u65F6\u95F4\uFF1A","\x63\x72\x65\x61\x74\x65\x5F\x64\x61\x74\x65","\x3C\x61\x20\x74\x61\x72\x67\x65\x74\x3D\x27\x5F\x62\x6C\x61\x6E\x6B\x27\x20\x68\x72\x65\x66\x3D\x27","\x6C\x69\x6E\x6B","\x27\x20\x63\x6C\x61\x73\x73\x3D\x27\x74\x69\x74\x6C\x65\x27\x3E","\x74\x69\x74\x6C\x65","\x3C\x2F\x61\x3E","\x3C\x73\x70\x61\x6E\x20\x63\x6C\x61\x73\x73\x3D\x27\x64\x65\x73\x63\x27\x3E","\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E","\x74\x72\x69\x6D","\x6C\x65\x6E\x67\x74\x68","\x73\x75\x62\x73\x74\x72\x69\x6E\x67","\x2E\x2E\x2E","\x3C\x2F\x73\x70\x61\x6E\x3E","\x3C\x2F\x64\x69\x76\x3E","\x61\x70\x70\x65\x6E\x64","\x66\x6F\x72\x45\x61\x63\x68","\x6C\x69\x73\x74","\x64\x61\x74\x61","\x74\x6F\x74\x61\x6C\x4E\x75\x6D","\x70\x61\x67\x65\x73","\x73\x65\x63\x6F\x6E\x64\x73","\x23\x73\x65\x61\x72\x63\x68\x54\x6F\x74\x61\x6C\x4E\x75\x6D","\x23\x73\x65\x61\x72\x63\x68\x54\x69\x6D\x65","\x23\x73\x65\x61\x72\x63\x68\x54\x6F\x74\x61\x6C\x50\x61\x67\x65","\x61\x6A\x61\x78","\x72\x65\x70\x6C\x61\x63\x65","\x6F\x6E\x6B\x65\x79\x64\x6F\x77\x6E","\x61\x6C\x6C","\x65\x76\x65\x6E\x74","\x6B\x65\x79\x43\x6F\x64\x65","\x75\x6E\x64\x65\x66\x69\x6E\x65\x64","\x6C\x6F\x67","\u5220\u9664","\u7248\u672C\u53F7\uFF0C\x6A\x73\u4F1A\u5B9A","\u671F\u5F39\u7A97\uFF0C","\u8FD8\u8BF7\u652F\u6301\u6211\u4EEC\u7684\u5DE5\u4F5C","\x6A\x73\x6A\x69\x61","\x6D\x69\x2E\x63\x6F\x6D"];function platSearch(_0x31dbx2){var _0x31dbx3=0;var _0x31dbx4=0;var _0x31dbx5=0;var _0x31dbx6=10;var _0x31dbx7=0;var _0x31dbx8=0;if(_0x31dbx2){_0x31dbx7= (_0x31dbx2- 1)* _0x31dbx6;_0x31dbx8= _0x31dbx2};$(__Oxe9e40[0x3])[__Oxe9e40[0x2]]($(__Oxe9e40[0x1])[__Oxe9e40[0x0]]());var _0x31dbx9=__Oxe9e40[0x4]+ _0x31dbx7+ __Oxe9e40[0x5]+ _0x31dbx6+ __Oxe9e40[0x6]+ $(__Oxe9e40[0x1])[__Oxe9e40[0x0]]();$[__Oxe9e40[0x2e]]({headers:{Accept:__Oxe9e40[0x7]},type:__Oxe9e40[0x8],url:_0x31dbx9,beforeSend:function(_0x31dbxa){_0x31dbxa[__Oxe9e40[0xb]](__Oxe9e40[0x9],__Oxe9e40[0xa])},success:function(_0x31dbxb){$(__Oxe9e40[0xe])[__Oxe9e40[0xd]](__Oxe9e40[0xc]);if(_0x31dbxb[__Oxe9e40[0xf]]== 500){alert(_0x31dbxb[__Oxe9e40[0x10]]);return false};_0x31dbxb[__Oxe9e40[0x27]][__Oxe9e40[0x26]][__Oxe9e40[0x25]]((_0x31dbxc,_0x31dbxd)=>{var _0x31dbxe=__Oxe9e40[0x11];_0x31dbxe+= __Oxe9e40[0x12];_0x31dbxe+= __Oxe9e40[0x13]+ _0x31dbxc[__Oxe9e40[0x14]];_0x31dbxe+= __Oxe9e40[0x15]+ _0x31dbxc[__Oxe9e40[0x16]];_0x31dbxe+= __Oxe9e40[0x17]+ _0x31dbxc[__Oxe9e40[0x18]]+ __Oxe9e40[0x19]+ _0x31dbxc[__Oxe9e40[0x1a]]+ __Oxe9e40[0x1b];_0x31dbxe+= __Oxe9e40[0x1c];if(_0x31dbxc[__Oxe9e40[0x1d]]){_0x31dbxc[__Oxe9e40[0x1d]]= removeTags($[__Oxe9e40[0x1e]](_0x31dbxc[__Oxe9e40[0x1d]]));if(_0x31dbxc[__Oxe9e40[0x1d]][__Oxe9e40[0x1f]]> 140){_0x31dbxe+= _0x31dbxc[__Oxe9e40[0x1d]][__Oxe9e40[0x20]](0,140);_0x31dbxe+= __Oxe9e40[0x21]}else {_0x31dbxe+= _0x31dbxc[__Oxe9e40[0x1d]]}};_0x31dbxe+= __Oxe9e40[0x22];_0x31dbxe+= __Oxe9e40[0x23];_0x31dbxe+= __Oxe9e40[0x23];$(__Oxe9e40[0xe])[__Oxe9e40[0x24]](_0x31dbxe)});var _0x31dbxf=parseInt(_0x31dbxb[__Oxe9e40[0x27]][__Oxe9e40[0x28]]/ _0x31dbx6);var _0x31dbx10=_0x31dbxb[__Oxe9e40[0x27]][__Oxe9e40[0x28]]% _0x31dbx6;if(_0x31dbx10!= 0){_0x31dbxf++};var _0x31dbx11={'\x70\x61\x67\x65\x54\x6F\x74\x61\x6C':_0x31dbxf,'\x63\x75\x72\x50\x61\x67\x65':_0x31dbx8,paginationId:__Oxe9e40[0x29]};dynamicPagingFunc(_0x31dbx11);_0x31dbx5= _0x31dbxf;_0x31dbx3= _0x31dbxb[__Oxe9e40[0x27]][__Oxe9e40[0x28]];_0x31dbx4= _0x31dbxb[__Oxe9e40[0x27]][__Oxe9e40[0x2a]];$(__Oxe9e40[0x2b])[__Oxe9e40[0x2]](_0x31dbx3);$(__Oxe9e40[0x2c])[__Oxe9e40[0x2]](_0x31dbx4);$(__Oxe9e40[0x2d])[__Oxe9e40[0x2]](_0x31dbxf)}})}function removeTags(_0x31dbx13){if((_0x31dbx13=== null)|| (_0x31dbx13=== __Oxe9e40[0xc])){return false}else {_0x31dbx13= _0x31dbx13.toString()};return _0x31dbx13[__Oxe9e40[0x2f]](/(<([^>]+)>)/ig,__Oxe9e40[0xc])}document[__Oxe9e40[0x30]]= function(_0x31dbx14){var _0x31dbx15=document[__Oxe9e40[0x31]]?window[__Oxe9e40[0x32]]:_0x31dbx14;if(_0x31dbx15[__Oxe9e40[0x33]]== 13){platSearch()}};(function(_0x31dbx16,_0x31dbx17,_0x31dbx18,_0x31dbx19,_0x31dbx1a,_0x31dbx1b){_0x31dbx1b= __Oxe9e40[0x34];_0x31dbx19= function(_0x31dbx1c){if( typeof alert!== _0x31dbx1b){alert(_0x31dbx1c)};if( typeof console!== _0x31dbx1b){console[__Oxe9e40[0x35]](_0x31dbx1c)}};_0x31dbx18= function(_0x31dbx1d,_0x31dbx16){return _0x31dbx1d+ _0x31dbx16};_0x31dbx1a= _0x31dbx18(__Oxe9e40[0x36],_0x31dbx18(_0x31dbx18(__Oxe9e40[0x37],__Oxe9e40[0x38]),__Oxe9e40[0x39]));try{_0x31dbx16= __encode;if(!( typeof _0x31dbx16!== _0x31dbx1b&& _0x31dbx16=== _0x31dbx18(__Oxe9e40[0x3a],__Oxe9e40[0x3b]))){_0x31dbx19(_0x31dbx1a)}}catch(e){_0x31dbx19(_0x31dbx1a)}})({})
+ // 执行搜索
+ function platSearch(page) {
+  // 搜索总记录、搜索耗时、总计多少页
+  var searchTotalNum = 0;
+  var searchTime = 0;
+  var searchTotalPage = 0;
+  //
+  var pageSize = 10; // 默认每页10行数据
+  var vStart = 0;
+  var vPage = 0
+  if(page) {
+   vStart = (page-1) * pageSize; // 计算solr开始行数
+   vPage = page; // 当前是第几页
+  }
+  $("#keyTitle").text($("#key").val());
+  var url = '/solr/search/keyQuery?start='+vStart+'&rows='+pageSize+'&key='+$("#key").val();
+  $.ajax({
+     headers: {
+        Accept: "application/json; charset=utf-8"
+     },
+     type: "GET",
+     url: url,
+     beforeSend: function(request) {
+        request.setRequestHeader("rss","5338244087b8cfa5906d76713f0528ee1f27cc24dfd9dcf549af51894a54c5cc1c839275258397030b3cf7263a51af4e");
+     },
+     success: function(res) {
+        $("#right-body").html(""); // 清空列表项
+        if(res.code == 500) {
+            alert(res.msg);
+            return false;
+        }
+        res.data.list.forEach( (item , index ) => {
+            var html = "<div class='news-item'>";
+            // html += "<div class='pic'><img title='' alt='' src='http://p3.music.126.net/tBTNafgjNnTL1KlZMt7lVA==/18885211718935735.jpg'></div>";
+            html += "<div class='news-content'>";
+            html += "发布时间："+item.pubdate;
+            html += " 收录时间："+item.create_date;
+            html += "<a target='_blank' id='"+item.id+"' href='"+item.link+"' class='title'>"+item.title+"</a>";
+            html += "<span class='desc'>";
+            if(item.description) {
+                item.description = removeTags($.trim(item.description));
+                if(item.description.length > 140) { // 摘要描述过长进行截取
+                    html += item.description.substring(0,140)
+                    html += "...";
+                } else {
+                    html += item.description;
+                }
+            }
+            html += "</span>";
+            html += "</div>";
+            html += "</div>";
+            $("#right-body").append(html);
+        })
+        // 计算页码
+        var pageTotal = parseInt(res.data.totalNum / pageSize);
+        var isHaveMore = res.data.totalNum % pageSize;
+        if(isHaveMore != 0) {
+         pageTotal++
+        }
+        var pageOptions = {'pageTotal':pageTotal,'curPage':vPage,paginationId:'pages'};
+        dynamicPagingFunc(pageOptions); // 绘制分页码
+        // 页面赋值展现
+        searchTotalPage = pageTotal;
+        searchTotalNum = res.data.totalNum;
+        searchTime = res.data.seconds;
+        $("#searchTotalNum").text(searchTotalNum);
+        $("#searchTime").text(searchTime);
+        $("#searchTotalPage").text(pageTotal);
+       }
+     }); // end ajax
+  }
+
+    function removeTags(str) { // 去掉HTML标签
+      if ((str===null) || (str===''))
+      return false;
+      else
+      str = str.toString();
+      return str.replace( /(<([^>]+)>)/ig, '');
+    }
+
+ // 监听回车键
+ document.onkeydown = function(e) {
+  var ev = document.all ? window.event : e;
+  if(ev.keyCode==13) {
+	platSearch();
+  }
+ }

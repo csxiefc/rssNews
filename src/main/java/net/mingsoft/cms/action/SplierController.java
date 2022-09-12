@@ -1,21 +1,25 @@
 package net.mingsoft.cms.action;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import net.mingsoft.cms.biz.*;
 import net.mingsoft.cms.biz.impl.ParseLinkBizImpl;
 import net.mingsoft.cms.entity.*;
 import net.mingsoft.cms.util.DateUtil;
+import net.mingsoft.cms.util.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -50,7 +54,6 @@ public class SplierController {
 	 */
 	@GetMapping("/execute")
 	@ResponseBody
-	@Transactional
 	public AjaxResult execute(String siteId, String seedId,String itemId,boolean rebuild){
 		AjaxResult result = null;
 		// 开始时间
@@ -168,7 +171,9 @@ public class SplierController {
 	 * @return
 	 */
 	private AjaxResult<Integer> crawlByRssSeedObj(RssSiteEntity siteObj, RssSeedEntity seedObj, boolean rebuild) {
+		AjaxResult<Integer> result = AjaxResult.success(0);
 		int count = 0;
+		String errorMsg = "";
 		QueryWrapper query = new QueryWrapper(new RssItemEntity());
 		query.eq("seed_id",seedObj.getId());
 		if(!rebuild) { // 仅查询未被解析过的链接
@@ -178,25 +183,34 @@ public class SplierController {
 		if(itemList.size() == 0) {
 			AjaxResult.success(new Integer(count));
 		}
+		// 分隔为每200条分批进行解析、和保存更新
+		List<List<RssItemEntity>> dealItemList = ListUtils.splistList(itemList,200);
 		IParseLinkBiz parseLinkBiz = new ParseLinkBizImpl();
-		Collection<ContentEntity> list = new LinkedList<>();
-		Collection<RssItemEntity> itemUpdateList = new LinkedList<>();
-		for(RssItemEntity itemObj : itemList) {
-			AjaxResult itemRes = parseLinkBiz.parse(siteObj,seedObj,itemObj);
-			if(itemRes.getCode() == 200) { // 新增保存-CMS文章
-				ContentEntity newObj = this.convert2CmsContent((RssItemEntity)itemRes.getData());
-				list.add(newObj);
-				itemUpdateList.add(itemObj);
+		for(List<RssItemEntity> dealList : dealItemList) {
+			List<RssItemEntity> itemUpdateList = new ArrayList<>();
+			for(RssItemEntity itemObj : dealList) {
+				AjaxResult itemRes = parseLinkBiz.parse(siteObj,seedObj,itemObj);
+				if(itemRes.getCode() == 200) { // 新增保存-CMS文章
+					itemUpdateList.add(itemObj);
+				}
 			}
+			if(itemUpdateList.size() > 0) { // 批量更新RSS ITEM，每200条保存一次
+				try {
+					this.rssItemBiz.updateBatchById((Collection<RssItemEntity>) itemUpdateList);
+					count += itemUpdateList.size();
+				} catch (Exception e) {
+					errorMsg = ExceptionUtil.getRootCauseMessage(e);
+				}
+			}
+			// 释放
+			itemUpdateList.clear();itemUpdateList=null;
 		}
-		if(list.size() > 0) {
-			// 批量保存CMS文章
-			this.contentBiz.saveBatch(list);
-			count = list.size();
-			// 批量更新RSS ITEM
-			this.rssItemBiz.updateBatchById(itemUpdateList);
-		}
-		return AjaxResult.success(new Integer(count));
+		result.setMsg("count="+itemList.size()+",fact="+count+",msg="+errorMsg);
+		result.setData(count);
+		// 释放
+		dealItemList.clear(); dealItemList = null;
+		itemList.clear();itemList=null;
+		return result;
 	}
 
 
@@ -212,9 +226,12 @@ public class SplierController {
 		IParseLinkBiz parseLinkBiz = new ParseLinkBizImpl();
 		AjaxResult itemRes = parseLinkBiz.parse(siteObj,seedObj,itemObj);
 		if(itemRes.getCode() == 200) {
+			/*
+			在解析网页内容的时候，不做CMS的文章建立
 			ContentEntity newObj = this.convert2CmsContent((RssItemEntity)itemRes.getData());
 			// 新增保存-CMS文章
 			this.contentBiz.save(newObj);
+			 */
 			// 更新RSS行记录
 			this.rssItemBiz.updateById(itemObj);
 			return AjaxResult.success(new Integer(1));
@@ -233,7 +250,7 @@ public class SplierController {
 		ContentEntity newObj = new ContentEntity();
 		newObj.setDatasource("RssItem");
 		newObj.setDatasourceId(item.getId());
-		newObj.setCategoryId("1565900410928119810"); // 测试-头条资讯
+		newObj.setCategoryId("1565900410928119810"); // 对接CMS文章管理-测试栏目
 		newObj.setContentAuthor(item.getAuthor());
 		newObj.setContentTitle(item.getTitle());
 		newObj.setContentDetails(item.getLinkContent());

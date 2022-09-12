@@ -1,8 +1,7 @@
-package net.mingsoft.cms.spider;
+package net.mingsoft.cms.spider.crawl;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;

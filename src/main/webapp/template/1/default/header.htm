@@ -11,9 +11,15 @@
    <div id="key_1605172743000_96378" class="nav-h5-body" style="display: none">
     <a href="{ms:global.host/}" class="nav-h5-item"> 首页 </a>
     {ms:channel flag='nav' type='top'}
-    <a href="<#if field.type==3>{ms:global.url/}${field.typeurl}<#else>{ms:global.url/}${field.typelink}</#if>" class="nav-h5-item <#if typeid==field.typeid || (ids?has_content && ids?index_of('${field.typeid}') gt -1)> sel</#if>">
+    <#if field.typeurl?has_content>
+    <a target="_blank" href="${field.typeurl}">${field.typetitle}</a>
+    <#else>
+    <a href="<#if field.type==3>{ms:global.url/}${field.typeurl}<<#else>{ms:global.url/}${field.typelink}</#if>" class="nav-h5-item <#if typeid==field.typeid || (ids?has_content && ids?index_of('${field.typeid}') gt -1)> sel</#if>">
      ${field.typetitle}
     </a>
+    </#if>
+
+
     {/ms:channel}
    </div>
   </div>

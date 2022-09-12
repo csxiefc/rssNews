@@ -66,6 +66,7 @@ public class ContentBean extends ContentEntity {
 
     private String id;
 
+
     public String getId() {
         return id;
     }
@@ -122,4 +123,5 @@ public class ContentBean extends ContentEntity {
     public void setNoflag(String noflag) {
         this.noflag = noflag;
     }
+
 }

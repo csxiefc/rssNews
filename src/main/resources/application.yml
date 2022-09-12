@@ -84,7 +84,7 @@ spring:
           enabled: true #启用druid监控
 
   profiles:
-    active: dev
+    active: prod
   cache:
     ehcache:
       config: classpath:ehcache.xml

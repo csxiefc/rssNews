@@ -119,6 +119,10 @@ private static final long serialVersionUID = 1574925152617L;
 
 	private String datasourceId;
 
+	private String isBuild;
+
+	private Date buildDatetime;
+
 	public Integer getContentHit() {
 		return contentHit;
 	}
@@ -307,5 +311,21 @@ private static final long serialVersionUID = 1574925152617L;
 
 	public void setDatasourceId(String datasourceId) {
 		this.datasourceId = datasourceId;
+	}
+
+	public String getIsBuild() {
+		return isBuild;
+	}
+
+	public void setIsBuild(String isBuild) {
+		this.isBuild = isBuild;
+	}
+
+	public Date getBuildDatetime() {
+		return buildDatetime;
+	}
+
+	public void setBuildDatetime(Date buildDatetime) {
+		this.buildDatetime = buildDatetime;
 	}
 }

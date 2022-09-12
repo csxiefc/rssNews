@@ -191,8 +191,7 @@ public class CmsParserUtil {
      * @throws MalformedTemplateNameException
      * @throws TemplateNotFoundException
      */
-    public static void generateBasic(List<CategoryBean> articleIdList, String htmlDir, boolean reBuild) {
-
+    public static List<String> generateBasic(List<CategoryBean> articleIdList, String htmlDir, boolean reBuild) {
         Map<String, Object> parserParams = new HashMap<String, Object>();
         parserParams.put(ParserUtil.IS_DO, false);
         if (BasicUtil.getWebsiteApp() != null) {
@@ -213,8 +212,6 @@ public class CmsParserUtil {
         List<String> generateIds = new ArrayList<>();
         // 生成文章
         for (int artId = 0; artId < articleIdList.size(); ) {
-
-
             CategoryBean categoryBean = articleIdList.get(artId);
             String writePath = null;
             //设置分页类
@@ -315,5 +312,6 @@ public class CmsParserUtil {
             }
             artId++;
         }
+        return generateIds;
     }
 }

@@ -89,4 +89,20 @@ public class RssItemBizImpl  extends BaseBizImpl<IRssItemDao, RssItemEntity> imp
         }
         return result;
     }
+
+    @Override
+    public List<RssItemEntity> getData(String categoryId, Date pubDate, int limit) {
+        QueryWrapper query = new QueryWrapper(new RssItemEntity());
+        query.eq("del",0);
+        query.eq("categoryId",categoryId);
+        if(pubDate != null) {
+            query.gt("pubdate", pubDate); // DateUtil.stringToDate(pubDate,"yyyy-MM-dd HH:mm:ss")
+        }
+        query.orderByDesc("pubdate");
+        if(limit > 0) {
+            query.last("limit "+limit);
+        }
+        List<RssItemEntity> result = this.list(query);
+        return result;
+    }
 }

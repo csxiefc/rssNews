@@ -24,4 +24,6 @@ public interface IRssItemBiz extends IBaseBiz<RssItemEntity> {
 
     int convertBySyndEntry(String batchNo, RssSeedEntity seedObj, List<SyndEntry> syndList);
 
+    List<RssItemEntity> getData(String categoryId, Date pubDate,int limit) ;
+
 }

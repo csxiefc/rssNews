@@ -1,4 +1,4 @@
-package net.mingsoft.cms.spider;
+package net.mingsoft.cms.spider.crawl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

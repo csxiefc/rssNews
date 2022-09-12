@@ -1,7 +1,6 @@
-package net.mingsoft.cms.spider;
+package net.mingsoft.cms.spider.crawl;
 
 import us.codecraft.webmagic.*;
-import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 public class GithubRepoPageProcessor implements PageProcessor {
