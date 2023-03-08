@@ -121,6 +121,8 @@ private static final long serialVersionUID = 1574925152617L;
 
 	private String isBuild;
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //返回时间类型
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") //接收时间类型
 	private Date buildDatetime;
 
 	public Integer getContentHit() {
